@@ -1,0 +1,51 @@
+# Node / JavaScript
+node_modules/
+dist/
+build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python / ML
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ML Model Artifacts
+# The trained .joblib model is checked in (it is small <5MB)
+# Exclude large raw data files
+*.tar.gz
+*.bin
+ml-model/*.csv
+
+# Uploaded Files (runtime, not source code)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Test Coverage
+coverage/
+.nyc_output/
+
+# System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
