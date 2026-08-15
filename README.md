@@ -15,6 +15,95 @@ Nexora is designed to help job seekers, students, and professionals optimize the
 - **Candidate-Centric Experience**: Provide an intuitive, modern dashboard with interactive reports, score visualizations, and analysis history.
 
 ---
+## 🚀 Setup & Execution Guide
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/adityakalane226/nexora-ai-resume-analyzer.git
+cd nexora-ai-resume-analyzer
+```
+
+---
+
+### Step 2: Database Setup (PostgreSQL)
+
+#### Option A: Using pgAdmin 4 (GUI)
+1. Open **pgAdmin 4** and connect to your local PostgreSQL server.
+2. Create a new database named **`nexora_resume_db`**.
+3. Open the **Query Tool** on `nexora_resume_db`.
+4. Open and execute [`database/schema.sql`](database/schema.sql) (Press `F5`).
+5. Open and execute [`database/seed.sql`](database/seed.sql) (Press `F5`).
+
+#### Option B: Using psql CLI
+```bash
+psql -U postgres -c "CREATE DATABASE nexora_resume_db;"
+psql -U postgres -d nexora_resume_db -f database/schema.sql
+psql -U postgres -d nexora_resume_db -f database/seed.sql
+```
+
+---
+
+### Step 3: Configure Environment Variables
+
+#### Backend (`backend/.env`):
+Create `backend/.env` based on `backend/.env.example`:
+```env
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=nexora_super_secret_jwt_key_2026
+JWT_EXPIRES_IN=7d
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=nexora_resume_db
+DB_USER=postgres
+DB_PASSWORD=post
+
+ML_SERVICE_URL=http://localhost:8000
+CLIENT_URL=http://localhost:5173
+```
+
+#### Frontend (`frontend/.env`):
+In development, Vite proxies requests via `vite.config.js`. Leave `VITE_API_URL` empty or set:
+```env
+VITE_API_URL=
+```
+
+---
+
+### Step 4: Install Dependencies & Run Services
+
+Open **3 separate terminal windows** to run the 3 tiers:
+
+#### 🪟 Terminal 1 — Python FastAPI ML Microservice
+```bash
+cd ml-service
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+- **ML Service URL**: `http://localhost:8000`
+- **Interactive Swagger Docs**: `http://localhost:8000/docs`
+- **Health Check**: `http://localhost:8000/health`
+
+#### 🪟 Terminal 2 — Node.js Express Backend
+```bash
+cd backend
+npm install
+npm run dev
+```
+- **Backend API URL**: `http://localhost:5000`
+- **Health Check**: `http://localhost:5000/api/health`
+
+#### 🪟 Terminal 3 — React Frontend (Vite)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+- **Web Application URL**: **`http://localhost:5173`**
+
+---
 
 ## ✨ Key Features & Functionality
 
@@ -163,93 +252,6 @@ Ensure the following runtimes and tools are installed on your development system
 
 ---
 
-## 🚀 Setup & Execution Guide
-
-### Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/adityakalane226/sl2.git
-cd sl2
-```
-
----
-
-### Step 2: Database Setup (PostgreSQL)
-
-#### Option A: Using pgAdmin 4 (GUI)
-1. Open **pgAdmin 4** and connect to your local PostgreSQL server.
-2. Create a new database named **`nexora_resume_db`**.
-3. Open the **Query Tool** on `nexora_resume_db`.
-4. Open and execute [`database/schema.sql`](database/schema.sql) (Press `F5`).
-5. Open and execute [`database/seed.sql`](database/seed.sql) (Press `F5`).
-
-#### Option B: Using psql CLI
-```bash
-psql -U postgres -c "CREATE DATABASE nexora_resume_db;"
-psql -U postgres -d nexora_resume_db -f database/schema.sql
-psql -U postgres -d nexora_resume_db -f database/seed.sql
-```
-
----
-
-### Step 3: Configure Environment Variables
-
-#### Backend (`backend/.env`):
-Create `backend/.env` based on `backend/.env.example`:
-```env
-PORT=5000
-NODE_ENV=development
-JWT_SECRET=nexora_super_secret_jwt_key_2026
-JWT_EXPIRES_IN=7d
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=nexora_resume_db
-DB_USER=postgres
-DB_PASSWORD=your_postgres_password
-
-ML_SERVICE_URL=http://localhost:8000
-CLIENT_URL=http://localhost:5173
-```
-
-#### Frontend (`frontend/.env`):
-In development, Vite proxies requests via `vite.config.js`. Leave `VITE_API_URL` empty or set:
-```env
-VITE_API_URL=
-```
-
----
-
-### Step 4: Install Dependencies & Run Services
-
-Open **3 separate terminal windows** to run the 3 tiers:
-
-#### 🪟 Terminal 1 — Python FastAPI ML Microservice
-```bash
-cd ml-service
-pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-- **ML Service URL**: `http://localhost:8000`
-- **Interactive Swagger Docs**: `http://localhost:8000/docs`
-- **Health Check**: `http://localhost:8000/health`
-
-#### 🪟 Terminal 2 — Node.js Express Backend
-```bash
-cd backend
-npm install
-npm run dev
-```
-- **Backend API URL**: `http://localhost:5000`
-- **Health Check**: `http://localhost:5000/api/health`
-
-#### 🪟 Terminal 3 — React Frontend (Vite)
-```bash
-cd frontend
-npm install
-npm run dev
-```
-- **Web Application URL**: **`http://localhost:5173`**
 
 ---
 
