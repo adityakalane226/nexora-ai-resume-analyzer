@@ -2,9 +2,12 @@
 TRUNCATE TABLE recommendations, analysis_skills, skills, analyses, jobs, resumes, users RESTART IDENTITY CASCADE;
 
 
+-- 1. demo users (password for all demo accounts: demo123)
 INSERT INTO users (name, email, password_hash) VALUES
-('Aditya Sharma', 'aditya@example.com', '$2a$10$wT03s6QJkZ/nMLYmJ5e.Oer.y5h8C/zH/.9gK5R/S9OaJ6Q1b4w2.'),
-('Sneha Kulkarni', 'sneha@example.com', '$2a$10$wT03s6QJkZ/nMLYmJ5e.Oer.y5h8C/zH/.9gK5R/S9OaJ6Q1b4w2.');
+('Demo Candidate', 'demo@nexora.ai', '$2a$10$VWOUKphhj8ryD6Asdc0HEuTaRRjrmMH9t5X462QqcnfWPFQJrhDtG'),
+('Aditya Sharma', 'candidate@nexora.ai', '$2a$10$VWOUKphhj8ryD6Asdc0HEuTaRRjrmMH9t5X462QqcnfWPFQJrhDtG'),
+('Test User', 'demo@gmail.com', '$2a$10$VWOUKphhj8ryD6Asdc0HEuTaRRjrmMH9t5X462QqcnfWPFQJrhDtG')
+ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO jobs (title, company, description, required_skills, experience_years, education_level) VALUES
 ('Machine Learning Engineer', 'Tech Corp', 'Seeking an ML Engineer experienced in Python, scikit-learn, FastAPI, SQL, Docker, and AWS model deployment.', ARRAY['Python', 'SQL', 'Machine Learning', 'FastAPI', 'Docker', 'AWS'], 3, 'Bachelor'),

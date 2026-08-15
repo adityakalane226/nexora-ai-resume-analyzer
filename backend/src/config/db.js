@@ -143,6 +143,15 @@ const initDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_recommendations_analysis ON recommendations(analysis_id);
     `);
 
+    // auto-seed default demo accounts (password: demo123)
+    await pool.query(`
+      INSERT INTO users (name, email, password_hash) VALUES
+      ('Demo Candidate', 'demo@nexora.ai', '$2a$10$VWOUKphhj8ryD6Asdc0HEuTaRRjrmMH9t5X462QqcnfWPFQJrhDtG'),
+      ('Aditya Sharma', 'candidate@nexora.ai', '$2a$10$VWOUKphhj8ryD6Asdc0HEuTaRRjrmMH9t5X462QqcnfWPFQJrhDtG'),
+      ('Demo User', 'demo@gmail.com', '$2a$10$VWOUKphhj8ryD6Asdc0HEuTaRRjrmMH9t5X462QqcnfWPFQJrhDtG')
+      ON CONFLICT (email) DO NOTHING;
+    `);
+
     console.log('[PostgreSQL] Database schema tables verified and ready.');
   } catch (err) {
     console.error('[PostgreSQL Schema Init Error]', err.message);

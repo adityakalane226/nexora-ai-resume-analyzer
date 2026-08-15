@@ -15,8 +15,20 @@ Nexora is designed to help job seekers, students, and professionals optimize the
 - **Candidate-Centric Experience**: Provide an intuitive, modern dashboard with interactive reports, score visualizations, and analysis history.
 
 ---
-## 🚀 Setup & Execution Guide
 
+## 🔑 Demo Login Credentials
+
+For testing and instant live evaluation, pre-configured demo candidate accounts are available:
+
+| Account Type | Email | Password | Role |
+|--------------|-------|----------|------|
+| **Primary Demo** | `demo@nexora.ai` | `demo123` | Candidate (Full Access) |
+| **Alternate Demo** | `candidate@nexora.ai` | `demo123` | Candidate (Full Access) |
+| **Standard User** | `demo@gmail.com` | `demo123` | Candidate (Full Access) |
+
+---
+## 🚀 Setup & Execution Guide
+   
 ### Step 1: Clone the Repository
 
 ```bash
