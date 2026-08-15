@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 // check if connecting to a cloud database (neon, supabase, render, etc.)
 const isRemoteDb = Boolean(
@@ -22,7 +23,7 @@ const poolConfig = process.env.DATABASE_URL
       port: parseInt(process.env.DB_PORT || '5432', 10),
       database: process.env.DB_NAME || 'nexora_resume_db',
       user: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD || 'postgres',
+      password: process.env.DB_PASSWORD || '',
       ssl: isRemoteDb ? { rejectUnauthorized: false } : false,
       max: 20,
       idleTimeoutMillis: 30000,
