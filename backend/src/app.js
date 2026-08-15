@@ -58,13 +58,16 @@ app.use((req, res) => {
   return errorResponse(res, 404, `Route ${req.originalUrl} not found`, 'NOT_FOUND');
 });
 
+const { initDatabase } = require('./config/db');
+
 // centralized error handling middleware
 app.use(errorHandler);
 
 if (require.main === module && process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`[Express Backend] Running on http://localhost:${PORT}`);
     console.log(`[Express Backend] ML Service target: ${process.env.ML_SERVICE_URL || 'http://localhost:8000'}`);
+    await initDatabase();
   });
 }
 
