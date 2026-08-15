@@ -1,12 +1,18 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const isProduction = process.env.NODE_ENV === 'production';
+// check if connecting to a cloud database (neon, supabase, render, etc.)
+const isRemoteDb = Boolean(
+  process.env.DATABASE_URL ||
+  process.env.DB_SSL === 'true' ||
+  process.env.NODE_ENV === 'production' ||
+  (process.env.DB_HOST && !['localhost', '127.0.0.1'].includes(process.env.DB_HOST))
+);
 
 const poolConfig = process.env.DATABASE_URL
   ? {
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
+      ssl: isRemoteDb ? { rejectUnauthorized: false } : false,
       max: 20,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 5000,
@@ -17,7 +23,7 @@ const poolConfig = process.env.DATABASE_URL
       database: process.env.DB_NAME || 'nexora_resume_db',
       user: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
-      ssl: process.env.DB_SSL === 'true' || isProduction ? { rejectUnauthorized: false } : false,
+      ssl: isRemoteDb ? { rejectUnauthorized: false } : false,
       max: 20,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 5000,
