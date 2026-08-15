@@ -11,6 +11,53 @@ class AnalysisModel {
     userId, resumeId, jobId, jobTitle, jobDescription,
     overallScore, atsScore, skillsScore, experienceScore, educationScore
   }) {
+    // ensure tables exist on-the-fly
+    await client.query(`
+      DO $$ BEGIN
+        CREATE TYPE match_type AS ENUM ('MATCHED', 'MISSING');
+      EXCEPTION
+        WHEN duplicate_object THEN null;
+      END $$;
+
+      CREATE TABLE IF NOT EXISTS analyses (
+        id SERIAL PRIMARY KEY,
+        user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        resume_id INT REFERENCES resumes(id) ON DELETE SET NULL,
+        job_id INT REFERENCES jobs(id) ON DELETE SET NULL,
+        job_title VARCHAR(150),
+        job_description TEXT,
+        overall_score INT NOT NULL CHECK (overall_score BETWEEN 0 AND 100),
+        ats_score INT NOT NULL CHECK (ats_score BETWEEN 0 AND 100),
+        skills_score INT NOT NULL CHECK (skills_score BETWEEN 0 AND 100),
+        experience_score INT NOT NULL CHECK (experience_score BETWEEN 0 AND 100),
+        education_score INT NOT NULL CHECK (education_score BETWEEN 0 AND 100),
+        status VARCHAR(50) DEFAULT 'COMPLETED',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS skills (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) UNIQUE NOT NULL,
+        category VARCHAR(50) DEFAULT 'General'
+      );
+
+      CREATE TABLE IF NOT EXISTS analysis_skills (
+        id SERIAL PRIMARY KEY,
+        analysis_id INT NOT NULL REFERENCES analyses(id) ON DELETE CASCADE,
+        skill_id INT NOT NULL REFERENCES skills(id) ON DELETE CASCADE,
+        match_status match_type NOT NULL,
+        confidence NUMERIC(4, 2) DEFAULT 1.00
+      );
+
+      CREATE TABLE IF NOT EXISTS recommendations (
+        id SERIAL PRIMARY KEY,
+        analysis_id INT NOT NULL REFERENCES analyses(id) ON DELETE CASCADE,
+        recommendation TEXT NOT NULL,
+        priority VARCHAR(20) DEFAULT 'MEDIUM',
+        category VARCHAR(50) DEFAULT 'General'
+      );
+    `);
+
     const queryText = `
       INSERT INTO analyses (
         user_id, resume_id, job_id, job_title, job_description,
